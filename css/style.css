@@ -1,0 +1,24 @@
+@font-face {
+    font-family: Roboto;
+    src: url('/fonts/Roboto-Regular.ttf');
+  }
+ * {
+    box-sizing: border-box;
+    margin: auto;
+}
+::selection {
+    display: none;
+}
+.inactive {
+    pointer-events: none;
+}
+.hidden {
+    visibility: hidden;
+}
+.error {
+    font-size: 4em;
+    color: red;
+}
+body {
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+}
