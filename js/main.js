@@ -1,34 +1,59 @@
 'use strict'
 
-const usersUrl = 'http://localhost3000/users';
+const usersUrl = 'http://localhost:3000/users';
 
-function handleResult(response) {
-  console.log(response);
-}
+// GET data from server
 
-async function request(url, options = {}) {
-  try {
-    const response = await fetch(url, options);
-    const result = await response.json();
-    return result.users;
-  } catch (error) {
-    console.error(error);
-  }
-}
+const fetchOptionsRead = {
+  method: 'GET',
+  mode: 'cors',
+  cache: 'no-cache',
+  headers: { 'Content-Type': 'application/json' },
+};
+const fetchOptionsUpdate = {
+  method: 'PUT',
+  mode: 'cors',
+  cache: 'no-cache',
+  headers: { 'Content-Type': 'application/json' },
+};
+const fetchOptionsDelete = {
+  method: 'DELETE',
+  mode: 'cors',
+  cache: 'no-cache',
+  headers: { 'Content-Type': 'application/json' },
+};
 
-request(usersUrl).then(handleResult)
-
-/*
 const fetchData = async (url, options) => {
   try {
     const response = await fetch(url, options);
-    if (!response, ok) {
-      throw new Error ('HTTP error' + response.statusText)
-    }
     const data = await response.json();
-    console.log(data);
+    return data;
   } catch (err) {
-    console.error('Error:' + err.message);
+    console.error(`Error: ${err.message}`);
+    return {};
   }
 };
-*/
+
+const displayUsersData = (usersData) => {
+  for (let i = 0; i < usersData.length; i += 1) {
+    const tableRow = `
+  <tr>
+  <td>${usersData[i].id}</td>
+  <td>${usersData[i].name}</td>
+  <td>${usersData[i].email}</td>
+  <td>${usersData[i].address}</td>
+  <td>
+      <button class="editBtn">Edit</button>
+      <button class="delBtn">Del</button>
+  </td>
+</tr>
+  `;
+    document.querySelector('tbody').insertAdjacentHTML('beforeend', tableRow);
+  }
+};
+
+(async () => {
+  const usersData = await fetchData(usersUrl, fetchOptionsRead);
+  console.log(usersData);
+  displayUsersData(usersData);
+})();

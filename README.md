@@ -24,9 +24,9 @@ A megvalósítandó funkciók a következők:
 
 Az alkalmazás jelenítse meg egy táblázatban a felhasználók adatait. 
 - Mindegyik oszlopban legyen egy Szerkesztés és egy Törlés gomb is.
-- A Törlés gombra kattintva azonnal, megerősítés nélkül törlődjön ki az adott user adata a szerverről, és kerüljön eltávolításra a DOM-ból is.
+- A Törlés gombra kattintva azonnal, megerősítés nélkül* törlődjön ki az adott user adata a szerverről, és kerüljön eltávolításra a DOM-ból is.(*legyen megerősítő kérdés)
 - A Szerkesztés gombra kattintva a user adatai az id kivételével módosíthatók lesznek a táblázaton belül. Egyszerű text inputmezőket használj. 
-- A Szerkesztés gombra kattintás után ez a gomb eltűnik, ugyanúgy, mint a Törlés gomb, helyette egy Mentés és Visszavonás gomb jelenjen meg.
+- A Szerkesztés gombra kattintás után ez a gomb eltűnik, ugyanúgy, mint a Törlés gomb, helyette egy Mentés és Visszavonás gomb jelenjen meg. *pl beszédes ikonok
 - A Mentés gombra kattintva validálni kell a beírt adatokat.
 - A validáláshoz reguláris kifejezéseket használj.
 - Amennyiben a beírt adatok nem validak, egy hibaüzenetet kell megjeleníteni, amely 5 másodperc után eltűnik.
@@ -38,7 +38,7 @@ Az alkalmazás jelenítse meg egy táblázatban a felhasználók adatait.
 - Amennyiben valaki mégis rákattint valamelyik másik Törlés vagy Szerkesztés gombra, jelenlen meg 5 másodpercre az alábbi hibaüzenet: “Először be kell fejezned az aktuális szerkesztést”!
 - A Visszavonás gombra kattintva a user eredeti, tehát a szerkesztés előtti adatai íródjanak vissza. Újra a Szerkesztés és Törlés gomb látszódjon.
 
-Legyen lehetőség új felhasználók létrehozására. Ehhez egy formot kell készíteni.
+Legyen lehetőség új felhasználók létrehozására. Ehhez egy formot kell készíteni. * lehet üres utolsó sor, vagy felugró form ablak is.
 - Új felhasználók adatainak felvitelekor legyen validálás. Itt ugyanazok a szabályok érvényesek, és ugyanúgy kell az üzeneteket is megjeleníteni, mint a szerkesztéskor.
 - Sikeres mentés esetén a felhasználó adatai jelenjenek meg a táblázat tetején. 
 - Innen kezdve szerkeszthető, törölhető az új user is.
