@@ -38,3 +38,60 @@ th, td{
     width: 15%;
     border: 1px dotted black;
 }
+
+/* The Modal (background) */
+.modal-background {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: scroll;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 70%;
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover, .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.modal-text {
+    font-size: larger;
+    text-align: center;
+    height: 10vh;
+    padding: 40px 0;
+}
+.modal-buttons {
+    text-align: center;
+}
+.btn {
+    height: 2rem;
+    width: 5rem;
+    padding: 5px;
+    border-radius: 2px;
+    border: 1px solid;
+}
+.red-btn {
+    background-color: lightsalmon;
+}
+.green-btn {
+    background-color: lightgreen;
+}
+.btn:hover, .btn:focus {
+    border: 2px solid;
+}

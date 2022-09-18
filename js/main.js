@@ -1,6 +1,9 @@
 'use strict'
 
 const usersUrl = 'http://localhost:3000/users';
+let deleteConfirmed = false;
+
+// modal
 
 // GET data from server
 
@@ -52,27 +55,32 @@ const displayUsersData = (usersData) => {
     document.querySelector('tbody').insertAdjacentHTML('beforeend', tableRow);
   }
 };
-const addButtonListeners = () => {
-  const editButtons = document.querySelectorAll('.editBtn');
-  const delButtons = document.querySelectorAll('.delBtn');
-  for (let i = 0; i < editButtons.length; i += 1) {
-    const id = editButtons[i].parentElement.parentElement.fi;
-    editButtons[i].addEventListener('click', () => editUser(id));
-  }
-  for (let i = 0; i < delButtons.length; i += 1) {
-    const id = delButtons[i].parentElement.parentElement.querySelector('.id').innerHTML;
-    delButtons[i].addEventListener('click', () => delUser(id));
-  }
-};
 
-const editUser = (id) => {
-  // update backend
-  // update object
-  console.log('edit id:', id);
-  displayUsersData(usersData);
+const delModal = (id) => {
+  const modalBackground = document.querySelector('.modal-background');
+  modalBackground.style.display = 'flex';
+  const closeX = document.querySelector('.close');
+  const greenButton = document.querySelector('.green-btn');
+  const redButton = document.querySelector('.red-btn');
+  closeX.onclick = function () {
+    modalBackground.style.display = 'none';
+  };
+  greenButton.onclick = function () {
+    modalBackground.style.display = 'none';
+    delUser(id);
+  };
+  window.onclick = function (event) {
+    if (event.target === modalBackground) {
+      modalBackground.style.display = 'none';
+    }
+  };
+  redButton.onclick = function () {
+    modalBackground.style.display = 'none';
+  };
 };
 
 const delUser = (id) => {
+  console.log('bakckend delete', id);
   // delete from backend
   const usersUrlDel = `${usersUrl}/${id}`;
   (async () => {
@@ -80,6 +88,28 @@ const delUser = (id) => {
     displayUsersData(usersData);
     addButtonListeners();
   })();
+};
+
+const addButtonListeners = () => {
+  const editButtons = document.querySelectorAll('.editBtn');
+  const delButtons = document.querySelectorAll('.delBtn');
+  for (let i = 0; i < editButtons.length; i += 1) {
+    const id = editButtons[i].parentElement.parentElement.querySelector('.id').innerHTML;
+    editButtons[i].addEventListener('click', () => editUser(id));
+  }
+
+  for (let i = 0; i < delButtons.length; i += 1) {
+    const id = delButtons[i].parentElement.parentElement.querySelector('.id').innerHTML;
+    delButtons[i].addEventListener('click', () => {
+      delModal(id);
+    });
+  }
+};
+
+const editUser = (id) => {
+  // update backend
+  // update object
+  console.log('edit id:', id);
 };
 
 (async () => {
