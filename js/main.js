@@ -1,7 +1,6 @@
 'use strict'
 
 const usersUrl = 'http://localhost:3000/users';
-let deleteConfirmed = false;
 
 // modal
 
@@ -39,29 +38,45 @@ const fetchData = async (url, options) => {
 
 const displayUsersData = (usersData) => {
   document.querySelector('table .usersData').innerHTML = '';
+  let usersTable = '';
   for (let i = 0; i < usersData.length; i += 1) {
     const tableRow = `
   <tr>
-  <td class='id'>${usersData[i].id}</td>
-  <td>${usersData[i].name}</td>
-  <td>${usersData[i].email}</td>
-  <td>${usersData[i].address}</td>
+  <td class = 'id'>${usersData[i].id}</td>
+  <td class = 'name${usersData[i].id}'>${usersData[i].name}</td>
+  <td class = 'email${usersData[i].id}'>${usersData[i].email}</td>
+  <td class = 'address${usersData[i].id}'>${usersData[i].address}</td>
   <td>
       <button class="editBtn">Edit</button>
       <button class="delBtn">Del</button>
   </td>
-</tr>
-  `;
-    document.querySelector('tbody').insertAdjacentHTML('beforeend', tableRow);
+</tr>`;
+    usersTable = tableRow + usersTable;
   }
+  document.querySelector('tbody').insertAdjacentHTML('afterbegin', usersTable);
+};
+
+const getUserDataById = (id) => {
+  const name = document.querySelector(`.name${id}`).innerHTML;
+  const email = document.querySelector(`.email${id}`).innerHTML;
+  const address = document.querySelector(`.address${id}`).innerHTML;
+  return [name, email, address];
 };
 
 const delModal = (id) => {
+  const [originalName, originalEmail, originalAddress] = getUserDataById(id);
   const modalBackground = document.querySelector('.modal-background');
   modalBackground.style.display = 'flex';
   const closeX = document.querySelector('.close');
   const greenButton = document.querySelector('.green-btn');
   const redButton = document.querySelector('.red-btn');
+  document.querySelector('#modal__name').setAttribute('value', originalName);
+  document.querySelector('#modal__email').setAttribute('value', originalEmail);
+  document.querySelector('#modal__address').setAttribute('value', originalAddress);
+  document.querySelector('#modal__name').setAttribute('readonly', true);
+  document.querySelector('#modal__email').setAttribute('readonly', true);
+  document.querySelector('#modal__address').setAttribute('readonly', true);
+
   closeX.onclick = function () {
     modalBackground.style.display = 'none';
   };
@@ -86,7 +101,6 @@ const delUser = (id) => {
   (async () => {
     const usersData = await fetchData(usersUrlDel, fetchOptionsDelete);
     displayUsersData(usersData);
-    addButtonListeners();
   })();
 };
 

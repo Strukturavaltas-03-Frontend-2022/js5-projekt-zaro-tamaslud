@@ -59,6 +59,18 @@ th, td{
     border: 1px solid #888;
     width: 70%;
 }
+.modal__p {
+    background-color: #ccc;
+    width: 80%;
+    height: 2em;
+    padding: 3px;
+}
+.label{
+    background-color: yellow;
+
+    width: 400px;
+}
+
 .close {
     color: #aaa;
     float: right;
