@@ -92,16 +92,19 @@ th, td{
     text-align: center;
 }
 .btn {
-    height: 2rem;
-    width: 5rem;
+    height: 3em;
+    width: 10em;
     padding: 5px;
     border-radius: 2px;
     border: 1px solid;
 }
-.red-btn {
+.cancel-btn {
     background-color: lightsalmon;
 }
-.green-btn {
+.delete-btn {
+    background-color: cadetblue;
+}
+.save-btn {
     background-color: lightgreen;
 }
 .btn:hover, .btn:focus {

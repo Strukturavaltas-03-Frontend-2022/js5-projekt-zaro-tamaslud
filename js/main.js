@@ -17,6 +17,12 @@ const fetchOptionsUpdate = {
   mode: 'cors',
   cache: 'no-cache',
   headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    id: 2,
+    name: 'Charin Dursley',
+    email: 'cdursley1@globo.com',
+    address: '04 Brentwood Plaza',
+  }),
 };
 const fetchOptionsDelete = {
   method: 'DELETE',
@@ -63,33 +69,58 @@ const getUserDataById = (id) => {
   return [name, email, address];
 };
 
-const delModal = (id) => {
+const showModal = (id, mode) => {
+  console.log('modal called', mode, 'mode');
   const [originalName, originalEmail, originalAddress] = getUserDataById(id);
   const modalBackground = document.querySelector('.modal-background');
   modalBackground.style.display = 'flex';
   const closeX = document.querySelector('.close');
-  const greenButton = document.querySelector('.green-btn');
-  const redButton = document.querySelector('.red-btn');
+  const cancelButton = document.querySelector('.cancel-btn');
   document.querySelector('#modal__name').setAttribute('value', originalName);
   document.querySelector('#modal__email').setAttribute('value', originalEmail);
   document.querySelector('#modal__address').setAttribute('value', originalAddress);
-  document.querySelector('#modal__name').setAttribute('readonly', true);
-  document.querySelector('#modal__email').setAttribute('readonly', true);
-  document.querySelector('#modal__address').setAttribute('readonly', true);
+  const saveButton = document.querySelector('.save-btn');
+  const deleteButton = document.querySelector('.delete-btn');
+  const modalName = document.querySelector('#modal__name');
+  const modalEmail = document.querySelector('#modal__email');
+  const modalAddress = document.querySelector('#modal__address');
 
-  closeX.onclick = function () {
+  if (mode === 'delete') {
+    modalName.setAttribute('readonly', true);
+    modalEmail.setAttribute('readonly', true);
+    modalAddress.setAttribute('readonly', true);
+    saveButton.style.display = 'none';
+    deleteButton.style.display = 'inline';
+    deleteButton.onclick = () => {
+      modalBackground.style.display = 'none';
+      delUser(id);
+    };
+  }
+
+  if (mode === 'edit') {
+    modalName.removeAttribute('readonly', true);
+    modalEmail.removeAttribute('readonly', true);
+    modalAddress.removeAttribute('readonly', true);
+    saveButton.style.display = 'inline';
+    deleteButton.style.display = 'none';
+    saveButton.onclick = () => {
+      modalBackground.style.display = 'none';
+      const editedName = modalName.value;
+      const editedEmail = modalEmail.value;
+      const editedAddress = modalAddress.value;
+      editUser(id, editedName, editedEmail, editedAddress);
+    };
+  }
+
+  closeX.onclick = () => {
     modalBackground.style.display = 'none';
   };
-  greenButton.onclick = function () {
-    modalBackground.style.display = 'none';
-    delUser(id);
-  };
-  window.onclick = function (event) {
+  window.onclick = (event) => {
     if (event.target === modalBackground) {
       modalBackground.style.display = 'none';
     }
   };
-  redButton.onclick = function () {
+  cancelButton.onclick = () => {
     modalBackground.style.display = 'none';
   };
 };
@@ -109,25 +140,36 @@ const addButtonListeners = () => {
   const delButtons = document.querySelectorAll('.delBtn');
   for (let i = 0; i < editButtons.length; i += 1) {
     const id = editButtons[i].parentElement.parentElement.querySelector('.id').innerHTML;
-    editButtons[i].addEventListener('click', () => editUser(id));
+    editButtons[i].addEventListener('click', () => showModal(id, 'edit'));
   }
 
   for (let i = 0; i < delButtons.length; i += 1) {
     const id = delButtons[i].parentElement.parentElement.querySelector('.id').innerHTML;
     delButtons[i].addEventListener('click', () => {
-      delModal(id);
+      showModal(id, 'delete');
     });
   }
 };
 
-const editUser = (id) => {
-  // update backend
-  // update object
-  console.log('edit id:', id);
+const editUser = (id, editedName, editedEmail, editedAddress) => {
+  // modify backend
+  fetchOptionsUpdate.body = JSON.stringify({
+    id: `${id}`,
+    name: `${editedName}`,
+    email: `${editedEmail}`,
+    address: `${editedAddress}`,
+  });
+  const usersUrlUpdate = `${usersUrl}/${id}`;
+  (async () => {
+    const usersData = await fetchData(usersUrlUpdate, fetchOptionsUpdate);
+    displayUsersData(usersData);
+  })();
 };
 
+// GET data from backend
 (async () => {
   const usersData = await fetchData(usersUrl, fetchOptionsRead);
+  console.log('data fetched from JSON');
   console.log(usersData);
   displayUsersData(usersData);
   addButtonListeners();
