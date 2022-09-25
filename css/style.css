@@ -30,9 +30,11 @@ body {
     left: 5%;
     height: 3em;
 }
+.header__title .header__buttonbar .header__message {
+    width: 33%;
+}
 h1{
     font-size: 2em;
-    text-align: center;
 }
 main{
     padding-top: 3em;
@@ -68,7 +70,9 @@ th, td{
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 70%;
+    width: 60%;
+    border-radius: 3px;
+    box-shadow: 3px 3px 6px 0;
 }
 .modal__p {
     background-color: #ccc;
@@ -78,10 +82,13 @@ th, td{
 }
 .label{
     background-color: yellow;
-
-    width: 400px;
+    height: 2em;
+    border: solid 2px yellow;
 }
-
+input{
+    padding: 0;
+    height: 2em;
+}
 .close {
     color: #aaa;
     float: right;
@@ -99,8 +106,12 @@ th, td{
     height: 3em;
     padding: 2em 0;
 }
+.modal__message {
+    height: 3em;
+    padding: 1em;
+    text-align: center;
+}
 .modal-buttons {
-    padding-top: 2em;
     text-align: center;
 }
 .btn {
@@ -109,6 +120,8 @@ th, td{
     padding: 5px;
     border-radius: 2px;
     border: 1px solid;
+    border-radius: 3px;
+
 }
 .cancel-btn {
     background-color: lightsalmon;

@@ -1,5 +1,7 @@
 'use strict'
 
+import validate from './validator.js';
+
 const usersUrl = 'http://localhost:3000/users';
 const sampleObject = {
   id: 0,
@@ -59,7 +61,7 @@ const displayUsersData = (usersData) => {
   <td>
       <button class="editBtn">Edit</button>
       <button class="delBtn">Del</button>
-  </td>
+      </td>
 </tr>`;
     usersTable = tableRow + usersTable;
   }
@@ -73,8 +75,39 @@ const getUserDataById = (id) => {
   return [name, email, address];
 };
 
+const displayModalMessage = (message, milleseconds) => {
+  const modalMessage = document.querySelector('.modal__message');
+  modalMessage.innerHTML = message;
+  setTimeout(() => { modalMessage.innerHTML = ''; }, milleseconds);
+};
+
+const displayHeaderMessage = (message, milleseconds) => {
+  const headerMessage = document.querySelector('.header__message');
+  headerMessage.innerHTML = message;
+  setTimeout(() => { headerMessage.innerHTML = ''; }, milleseconds);
+};
+
+const checkValidation = (editedName, editedEmail, editedAddress) => {
+  let errorMessage = 'Invalid ';
+  if (!validate(editedName, 'name')) {
+    errorMessage += 'name, ';
+  }
+  if (!validate(editedEmail, 'email')) {
+    errorMessage += 'email, ';
+  }
+  if (!validate(editedAddress, 'address')) {
+    errorMessage += 'address, ';
+  }
+  if (errorMessage !== 'Invalid ') {
+    displayModalMessage(`${errorMessage} please correct.`, 2000);
+    return false;
+  }
+  return true;
+};
+
 const showModal = (id, mode) => {
-  console.log('modal called', mode, 'mode');
+  const modalMessage = document.querySelector('.modal__message');
+  modalMessage.innerHTML = '';
   const [originalName, originalEmail, originalAddress] = getUserDataById(id);
   const modalBackground = document.querySelector('.modal-background');
   modalBackground.style.display = 'flex';
@@ -99,6 +132,7 @@ const showModal = (id, mode) => {
     deleteButton.onclick = () => {
       modalBackground.style.display = 'none';
       delUser(id);
+      displayHeaderMessage('user Deleted', 3000);
     };
   }
 
@@ -109,11 +143,13 @@ const showModal = (id, mode) => {
     saveButton.style.display = 'inline';
     deleteButton.style.display = 'none';
     saveButton.onclick = () => {
-      modalBackground.style.display = 'none';
       const editedName = modalName.value;
       const editedEmail = modalEmail.value;
       const editedAddress = modalAddress.value;
-      editUser(id, editedName, editedEmail, editedAddress);
+      if (checkValidation(editedName, editedEmail, editedAddress)) {
+        editUser(id, editedName, editedEmail, editedAddress);
+        displayHeaderMessage('modification saved', 3000);
+      }
     };
   }
 
@@ -127,11 +163,13 @@ const showModal = (id, mode) => {
     saveButton.style.display = 'inline';
     deleteButton.style.display = 'none';
     saveButton.onclick = () => {
-      modalBackground.style.display = 'none';
       const editedName = modalName.value;
       const editedEmail = modalEmail.value;
       const editedAddress = modalAddress.value;
-      addNewUser(id, editedName, editedEmail, editedAddress);
+      if (checkValidation(editedName, editedEmail, editedAddress)) {
+        addNewUser(id, editedName, editedEmail, editedAddress);
+        displayHeaderMessage('new user added', 3000);
+      }
     };
   }
 
@@ -149,7 +187,6 @@ const showModal = (id, mode) => {
 };
 
 const delUser = (id) => {
-  console.log('bakckend delete', id);
   // delete from backend
   const usersUrlDel = `${usersUrl}/${id}`;
   (async () => {
@@ -193,7 +230,7 @@ const editUser = (id, editedName, editedEmail, editedAddress) => {
 };
 
 const addNewUser = (id, editedName, editedEmail, editedAddress) => {
-  // modify backend
+  // add to backend
   fetchOptionsCreate.body = JSON.stringify({
     name: `${editedName}`,
     email: `${editedEmail}`,
@@ -209,8 +246,6 @@ const addNewUser = (id, editedName, editedEmail, editedAddress) => {
 // GET data from backend
 (async () => {
   const usersData = await fetchData(usersUrl, fetchOptionsRead);
-  console.log('data fetched from JSON');
-  console.log(usersData);
   displayUsersData(usersData);
   addButtonListeners();
 })();
