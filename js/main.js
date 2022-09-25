@@ -1,11 +1,20 @@
 'use strict'
 
 const usersUrl = 'http://localhost:3000/users';
-
-// modal
-
-// GET data from server
-
+const sampleObject = {
+  id: 0,
+  name: '',
+  email: '',
+  address: '',
+};
+// fetch options CRUD
+const fetchOptionsCreate = {
+  method: 'POST',
+  mode: 'cors',
+  cache: 'no-cache',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(sampleObject),
+};
 const fetchOptionsRead = {
   method: 'GET',
   mode: 'cors',
@@ -17,12 +26,7 @@ const fetchOptionsUpdate = {
   mode: 'cors',
   cache: 'no-cache',
   headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    id: 2,
-    name: 'Charin Dursley',
-    email: 'cdursley1@globo.com',
-    address: '04 Brentwood Plaza',
-  }),
+  body: JSON.stringify(sampleObject),
 };
 const fetchOptionsDelete = {
   method: 'DELETE',
@@ -76,6 +80,7 @@ const showModal = (id, mode) => {
   modalBackground.style.display = 'flex';
   const closeX = document.querySelector('.close');
   const cancelButton = document.querySelector('.cancel-btn');
+  document.querySelector('.modal__header').innerHTML = `${mode} user`
   document.querySelector('#modal__name').setAttribute('value', originalName);
   document.querySelector('#modal__email').setAttribute('value', originalEmail);
   document.querySelector('#modal__address').setAttribute('value', originalAddress);
@@ -85,7 +90,7 @@ const showModal = (id, mode) => {
   const modalEmail = document.querySelector('#modal__email');
   const modalAddress = document.querySelector('#modal__address');
 
-  if (mode === 'delete') {
+  if (mode === 'Delete') {
     modalName.setAttribute('readonly', true);
     modalEmail.setAttribute('readonly', true);
     modalAddress.setAttribute('readonly', true);
@@ -97,7 +102,7 @@ const showModal = (id, mode) => {
     };
   }
 
-  if (mode === 'edit') {
+  if (mode === 'Edit') {
     modalName.removeAttribute('readonly', true);
     modalEmail.removeAttribute('readonly', true);
     modalAddress.removeAttribute('readonly', true);
@@ -109,6 +114,24 @@ const showModal = (id, mode) => {
       const editedEmail = modalEmail.value;
       const editedAddress = modalAddress.value;
       editUser(id, editedName, editedEmail, editedAddress);
+    };
+  }
+
+  if (mode === 'Add new') {
+    modalName.removeAttribute('readonly', true);
+    modalEmail.removeAttribute('readonly', true);
+    modalAddress.removeAttribute('readonly', true);
+    document.querySelector('#modal__name').setAttribute('value', '');
+    document.querySelector('#modal__email').setAttribute('value', '');
+    document.querySelector('#modal__address').setAttribute('value', '');
+    saveButton.style.display = 'inline';
+    deleteButton.style.display = 'none';
+    saveButton.onclick = () => {
+      modalBackground.style.display = 'none';
+      const editedName = modalName.value;
+      const editedEmail = modalEmail.value;
+      const editedAddress = modalAddress.value;
+      addNewUser(id, editedName, editedEmail, editedAddress);
     };
   }
 
@@ -138,15 +161,18 @@ const delUser = (id) => {
 const addButtonListeners = () => {
   const editButtons = document.querySelectorAll('.editBtn');
   const delButtons = document.querySelectorAll('.delBtn');
+  const addUserButton = document.querySelector('.addUserBtn');
+  addUserButton.addEventListener('click', () => showModal(0, 'Add new'));
+
   for (let i = 0; i < editButtons.length; i += 1) {
     const id = editButtons[i].parentElement.parentElement.querySelector('.id').innerHTML;
-    editButtons[i].addEventListener('click', () => showModal(id, 'edit'));
+    editButtons[i].addEventListener('click', () => showModal(id, 'Edit'));
   }
 
   for (let i = 0; i < delButtons.length; i += 1) {
     const id = delButtons[i].parentElement.parentElement.querySelector('.id').innerHTML;
     delButtons[i].addEventListener('click', () => {
-      showModal(id, 'delete');
+      showModal(id, 'Delete');
     });
   }
 };
@@ -162,6 +188,20 @@ const editUser = (id, editedName, editedEmail, editedAddress) => {
   const usersUrlUpdate = `${usersUrl}/${id}`;
   (async () => {
     const usersData = await fetchData(usersUrlUpdate, fetchOptionsUpdate);
+    displayUsersData(usersData);
+  })();
+};
+
+const addNewUser = (id, editedName, editedEmail, editedAddress) => {
+  // modify backend
+  fetchOptionsCreate.body = JSON.stringify({
+    name: `${editedName}`,
+    email: `${editedEmail}`,
+    address: `${editedAddress}`,
+  });
+  const usersUrlAddNewUser = `${usersUrl}`;
+  (async () => {
+    const usersData = await fetchData(usersUrlAddNewUser, fetchOptionsCreate);
     displayUsersData(usersData);
   })();
 };

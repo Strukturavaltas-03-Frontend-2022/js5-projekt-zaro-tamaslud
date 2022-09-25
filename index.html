@@ -10,23 +10,30 @@
 </head>
 
 <body>
-    <header>
-        <h1>User database</h1>
+    <header class="fixedHeader">
+        <h1>
+            User database
+        </h1>
+        <div class="buttonBar">
+            <button class="addUserBtn">Add new user</button>
+        </div>
     </header>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>name</th>
-                <th>email</th>
-                <th>address</th>
-                <th>edit / del</th>
-            </tr>
-        </thead>
-        <tbody class="usersData">
-
-        </tbody>
-    </table>
+    <main>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>name</th>
+                    <th>email</th>
+                    <th>address</th>
+                    <th>edit / del</th>
+                </tr>
+            </thead>
+            <tbody class="usersData">
+    
+            </tbody>
+        </table>
+    </main>
 
     <div class="modal-background">
         <div class="modal-content">
@@ -34,6 +41,9 @@
                 <span class="close">x</span>
             </div>
             <div class="userData">
+                <div class="modal__header">
+                    Delete user
+                </div>
                 
                 <form>
                     <p class="modal__p">
@@ -56,9 +66,6 @@
                     </p>
                   </form> 
                 
-            </div>
-            <div class="modal-text">
-                Do you really want to DELETE this user ?
             </div>
             <div class="modal-buttons">
                 <button class="btn save-btn">Save modifications</button>
